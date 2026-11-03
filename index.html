@@ -1,57 +1,304 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tacos Don Ruli · Menú</title>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tacos Don Ruli</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Menú en línea de Tacos Don Ruli. Arma tu pedido y envíalo por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#fffaf3;--card:#fff;--ink:#2b1d12;--mut:#7a6a5c;--acc:#c2410c;--wa:#1f9d55;--line:#eadfce}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1410;--card:#241c16;--ink:#f6ece2;--mut:#b7a593;--line:#3a2e24}}
-:root[data-theme="dark"]{--bg:#1a1410;--card:#241c16;--ink:#f6ece2;--mut:#b7a593;--line:#3a2e24}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:110px}
-.demo{background:#fde68a;color:#3b2a00;text-align:center;font-size:13px;padding:6px 16px}
-header{padding:22px 16px 8px;max-width:640px;margin:auto}h1{margin:0;font-size:26px}header p{margin:4px 0;color:var(--mut);font-size:14px}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 16px;max-width:640px;margin:auto;position:sticky;top:0;background:var(--bg);z-index:2}
-.tabs a{white-space:nowrap;padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink);text-decoration:none;font-size:14px}
-main{max-width:640px;margin:auto;padding:0 16px}h2{font-size:18px;margin:22px 0 8px}
-.item{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
-.item b{display:block}.item small{color:var(--mut)}.price{color:var(--acc);font-weight:600;margin-top:2px}
-.qty{display:flex;align-items:center;gap:8px}.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
-.qty span{min-width:18px;text-align:center;font-weight:600}
-form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:16px}
-label{display:block;font-size:14px;margin:8px 0 4px}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--ink)}
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px}
-.bar div{max-width:640px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.bar button{background:var(--wa);color:#fff;border:0;border-radius:99px;padding:12px 18px;font-size:16px;font-weight:600;cursor:pointer}.bar button:disabled{opacity:.45}
-</style></head><body>
-<div class="demo">Demostración con un negocio ficticio. Así se vería el menú de tu negocio.</div>
-<header><h1>Tacos Don Ruli</h1><p>Martes a domingo · 7:00 p.m. a 1:00 a.m.</p><p>Para llevar y a domicilio (zona centro, envío $25)</p></header>
-<nav class="tabs" id="tabs"></nav>
-<main id="menu"></main>
-<main><form id="f" onsubmit="return false">
-<h2 style="margin-top:0">Tus datos</h2>
-<label for="nom">Nombre</label><input id="nom" autocomplete="name">
-<label for="tipo">¿Cómo lo quieres?</label><select id="tipo"><option>Para recoger</option><option>A domicilio</option></select>
-<div id="dirw" hidden><label for="dir">Dirección</label><input id="dir" autocomplete="street-address"></div>
-<label for="pago">Forma de pago</label><select id="pago"><option>Efectivo</option><option>Transferencia</option></select>
-<label for="nota">Notas (sin cebolla, salsa aparte...)</label><textarea id="nota" rows="2"></textarea>
-</form></main>
-<div class="bar"><div><span><small id="cnt">0 productos</small><br><b id="tot">$0</b></span><button id="send" disabled>Pedir por WhatsApp</button></div></div>
+/* Layout: app de pedidos de una columna (máx. 560px); portada con estado abierto/cerrado, menú por categorías, carrito como hoja inferior. */
+:root{
+  --bg:#fbf8f4; --surface:#ffffff; --sunk:#f3ece4; --ink:#22140f; --muted:#7b6a60; --line:#ebe1d6;
+  --chile:#b3261e; --chile-ink:#ffffff; --maiz:#f2b705; --wa:#128c4b;
+  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16100d; --surface:#211813; --sunk:#2b201a; --ink:#f7ede4; --muted:#bba99b; --line:#3a2c24;
+  --chile:#c7362c; --chile-ink:#ffffff; --maiz:#f5c33b; --wa:#1f9d5a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16100d; --surface:#211813; --sunk:#2b201a; --ink:#f7ede4; --muted:#bba99b; --line:#3a2c24;
+  --chile:#c7362c; --chile-ink:#ffffff; --maiz:#f5c33b; --wa:#1f9d5a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 var(--body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--maiz);outline-offset:2px}
+
+.demo{background:var(--maiz);color:#2a1d00;font-size:13px;font-weight:600;text-align:center;padding-block:7px}
+
+.hero{position:relative;overflow:hidden;background:var(--chile);color:var(--chile-ink)}
+.hero .wrap{padding-block:30px 22px;position:relative;z-index:1}
+.papel{position:absolute;inset:0 0 auto;width:100%;height:24px;z-index:0;display:block}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{width:64px;height:64px;flex:none;border-radius:50%;background:var(--maiz);display:grid;place-items:center;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.hero h1{font:800 clamp(30px,8vw,40px)/1 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.hero .sub{margin:4px 0 0;opacity:.92;font-size:15px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:#7ef0a9}
+.chip.cerrado .dot{background:#ffc89e}
+
+.cats{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.cats .wrap{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.cats a{flex:none;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:7px 14px;border-radius:99px;background:var(--sunk)}
+.cats a.on{background:var(--ink);color:var(--bg)}
+
+main.wrap{padding-block:4px 130px}
+h2{font:800 22px/1.1 var(--display);margin:26px 0 4px;letter-spacing:-.01em;scroll-margin-top:70px}
+.cat-note{color:var(--muted);font-size:14px;margin:0 0 12px}
+.list{display:grid;gap:10px}
+.item{display:grid;grid-template-columns:76px 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.pic{width:76px;height:76px;border-radius:12px;background:var(--sunk);display:grid;place-items:center}
+.info{min-width:0;display:grid;gap:2px}
+.name{font-weight:700;font-size:16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--maiz);color:#2a1d00;border-radius:6px;padding:2px 6px}
+.desc{color:var(--muted);font-size:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.price{font-weight:700;font-variant-numeric:tabular-nums}
+.add{border:0;background:var(--chile);color:var(--chile-ink);font-weight:700;border-radius:99px;padding:7px 16px;font-size:14px}
+.step{display:flex;align-items:center;gap:4px;background:var(--sunk);border-radius:99px;padding:3px}
+.step button{width:32px;height:32px;border:0;border-radius:50%;background:var(--surface);font-size:18px;font-weight:700;line-height:1}
+.step span{min-width:22px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.info-block{margin-top:28px;background:var(--sunk);border-radius:var(--r);padding:16px;display:grid;gap:6px;font-size:14px}
+.info-block b{font-family:var(--display);font-size:17px}
+
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:8;padding-top:14px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 65%,transparent)}
+.cartbar .wrap{display:flex}
+.cartbtn{flex:1;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:99px;background:var(--wa);color:#fff;padding:14px 20px;font-weight:700;font-size:16px;box-shadow:0 8px 24px rgba(18,140,75,.3);transition:transform .15s}
+.cartbtn .n{background:rgba(255,255,255,.22);border-radius:99px;padding:2px 10px;font-variant-numeric:tabular-nums}
+.cartbtn.bump{transform:scale(1.03)}
+
+.scrim{position:fixed;inset:0;background:rgba(10,6,4,.5);z-index:20}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-height:90%;overflow:auto;background:var(--surface);border-radius:22px 22px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet .wrap{display:grid;gap:14px;padding-block:10px 0}
+.grab{width:42px;height:5px;border-radius:9px;background:var(--line);margin:0 auto}
+.sheet-head{display:flex;justify-content:space-between;align-items:center}
+.sheet-head h3{font:800 22px/1 var(--display);margin:0}
+.x{border:0;background:var(--sunk);width:36px;height:36px;border-radius:50%;font-size:16px}
+.lines{display:grid;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:12px}
+.line{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.line .q{color:var(--muted)}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;border-radius:9px;padding:10px;background:transparent;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.fields{display:grid;gap:12px}
+label{font-size:14px;font-weight:600;display:grid;gap:6px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}
+.pv-label{font-size:12px;color:var(--muted);margin:0 0 6px}
+.preview{font-family:var(--body);background:var(--sunk);border-radius:12px;padding:12px;font-size:13px;white-space:pre-wrap;color:var(--muted);margin:0}
+.send{border:0;border-radius:99px;background:var(--wa);color:#fff;font-weight:700;font-size:17px;padding:15px;display:flex;justify-content:center;gap:10px;align-items:center;text-decoration:none}
+.send[aria-disabled="true"]{opacity:.5;pointer-events:none}
+.fine{font-size:12px;color:var(--muted);text-align:center;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;font-weight:600;z-index:30;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+</head>
+<body>
+<div class="demo"><div class="wrap">Ejemplo con un negocio ficticio · así se vería la página de tu negocio</div></div>
+
+<header class="hero">
+  <svg class="papel" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path id="papel-path" fill="#f2b705" d=""/></svg>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 40 40"><path d="M4 28a16 16 0 0 1 32 0z" fill="#e9a23b"/><path d="M8 27c2-6 6-9 12-9s10 3 12 9" fill="none" stroke="#b3261e" stroke-width="4" stroke-linecap="round"/><path d="M11 25c1-3 3-4 5-4m4 0c2 0 4 1 5 4" stroke="#3e8e41" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M4 28h32" stroke="#7a4a12" stroke-width="2"/></svg>
+      </div>
+      <div>
+        <h1>Tacos Don Ruli</h1>
+        <p class="sub">Pastor al trompo y suadero desde 2014</p>
+      </div>
+    </div>
+    <div class="facts">
+      <span class="chip" id="estado"><span class="dot"></span><span id="estado-txt">Abierto</span></span>
+      <span class="chip">Mar a dom · 7 p.m. a 1 a.m.</span>
+      <span class="chip">Domicilio $25</span>
+    </div>
+  </div>
+</header>
+
+<nav class="cats" aria-label="Categorías"><div class="wrap" id="cats"></div></nav>
+<main class="wrap" id="menu"></main>
+
+<div class="cartbar" id="cartbar" hidden>
+  <div class="wrap">
+    <button class="cartbtn" id="open-cart" type="button"><span class="n" id="cart-n">0</span><span>Ver pedido</span><span id="cart-t">$0</span></button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+  <div class="wrap">
+    <div class="grab"></div>
+    <div class="sheet-head"><h3 id="sheet-title">Tu pedido</h3><button class="x" id="close" type="button" aria-label="Cerrar">✕</button></div>
+    <div class="lines" id="lines"></div>
+    <div class="total"><span>Total</span><span id="total">$0</span></div>
+    <div class="seg" role="group" aria-label="Tipo de entrega">
+      <button type="button" id="t-llevar" aria-pressed="true">Paso a recoger</button>
+      <button type="button" id="t-dom" aria-pressed="false">A domicilio</button>
+    </div>
+    <div class="fields">
+      <label for="nom">Tu nombre<input id="nom" autocomplete="name" placeholder="Ej. Mariana"></label>
+      <label for="dir" id="dir-l" hidden>Dirección y referencia<input id="dir" autocomplete="street-address" placeholder="Calle, número, colonia"></label>
+      <label for="pago">¿Cómo pagas?<select id="pago"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta al recibir</option></select></label>
+      <label for="nota">Indicaciones<textarea id="nota" rows="2" placeholder="Sin cebolla, salsa aparte…"></textarea></label>
+    </div>
+    <div><p class="pv-label">Así le llega tu mensaje al negocio:</p><pre class="preview" id="preview"></pre></div>
+    <a class="send" id="send" href="#" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+      Enviar pedido por WhatsApp
+    </a>
+    <p class="fine">Se abre WhatsApp con tu pedido ya escrito. Tú decides si lo envías.</p>
+  </div>
+</section>
+<div class="toast" id="toast" role="status" hidden></div>
+
 <script>
-const NEGOCIO="Tacos Don Ruli", WHATSAPP=""; // número del negocio con lada, ej. 526671234567
-const ENVIO=25;
-const MENU={"Tacos":[["Orden de pastor","5 tacos con piña, cebolla y cilantro",85],["Orden de suadero","5 tacos de suadero dorado",90],["Campechanos","5 tacos de suadero con longaniza",95]],
-"Especiales":[["Gringa","Harina, pastor y queso",65],["Quesadilla","Maíz hecho a mano, con queso",40]],
-"Bebidas":[["Agua fresca 1 L","Horchata o jamaica",35],["Refresco","600 ml",25]]};
-const q={};const fmt=n=>"$"+n.toLocaleString("es-MX");
-const menu=document.getElementById("menu"),tabs=document.getElementById("tabs");
-Object.entries(MENU).forEach(([cat,items],ci)=>{tabs.insertAdjacentHTML("beforeend",`<a href="#c${ci}">${cat}</a>`);
-let h=`<h2 id="c${ci}">${cat}</h2>`;items.forEach(([n,d,p])=>{q[n]=0;h+=`<div class="item"><div><b>${n}</b><small>${d}</small><div class="price">${fmt(p)}</div></div><div class="qty"><button aria-label="Quitar ${n}" data-n="${n}" data-d="-1">−</button><span id="q-${n}">0</span><button aria-label="Agregar ${n}" data-n="${n}" data-d="1">+</button></div></div>`});menu.insertAdjacentHTML("beforeend",h)});
-const price=Object.fromEntries(Object.values(MENU).flat().map(([n,,p])=>[n,p]));
-menu.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const n=b.dataset.n;q[n]=Math.max(0,q[n]+ +b.dataset.d);document.getElementById("q-"+n).textContent=q[n];upd()});
-const tipo=document.getElementById("tipo");tipo.onchange=()=>{document.getElementById("dirw").hidden=tipo.value!=="A domicilio";upd()};
-function total(){let s=0,c=0;for(const n in q){s+=q[n]*price[n];c+=q[n]}if(c&&tipo.value==="A domicilio")s+=ENVIO;return[s,c]}
-function upd(){const[s,c]=total();document.getElementById("tot").textContent=fmt(s);document.getElementById("cnt").textContent=c+(c==1?" producto":" productos");document.getElementById("send").disabled=!c}
-document.getElementById("send").onclick=()=>{const[s]=total();const v=id=>document.getElementById(id).value.trim();
-let t=`Hola ${NEGOCIO}, quiero hacer un pedido:\n`;for(const n in q)if(q[n])t+=`• ${q[n]} x ${n} (${fmt(q[n]*price[n])})\n`;
-if(tipo.value==="A domicilio")t+=`• Envío (${fmt(ENVIO)})\n`;t+=`Total: ${fmt(s)}\n\n${tipo.value}`;if(tipo.value==="A domicilio"&&v("dir"))t+=`: ${v("dir")}`;
-t+=`\nPago: ${v("pago")}`;if(v("nom"))t+=`\nNombre: ${v("nom")}`;if(v("nota"))t+=`\nNotas: ${v("nota")}`;
-window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(t)}`,"_blank")};
-</script></body></html>
+/* ===== Datos del negocio: lo único que cambia de un cliente a otro ===== */
+const NEGOCIO = {
+  nombre: "Tacos Don Ruli",
+  whatsapp: "",              // con lada de país, sin espacios: 526671234567
+  envio: 25,
+  zona: "America/Mazatlan",  // hora de Culiacán
+  horario: {0:[19,25],2:[19,25],3:[19,25],4:[19,25],5:[19,25],6:[19,25]} // día (0 = domingo): [abre, cierra]; 25 = 1 a.m.
+};
+const shell = (meat) => `<svg width="54" height="54" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 30a16 16 0 0 1 32 0z" fill="#e9a23b"/><path d="M8 29c2-6 6-9 12-9s10 3 12 9" fill="none" stroke="${meat}" stroke-width="4" stroke-linecap="round"/><path d="M11 26c1-2 2-3 4-3m6 0c2 0 3 1 4 3" stroke="#3e8e41" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M4 30h32" stroke="#7a4a12" stroke-width="2"/></svg>`;
+const glass = (fill) => `<svg width="54" height="54" viewBox="0 0 40 40" aria-hidden="true"><path d="M11 9h18l-2.5 25h-13z" fill="#f4f0ea" stroke="#c9b9a8" stroke-width="1.5"/><path d="M12.3 16h15.4l-1.9 18h-11.6z" fill="${fill}"/></svg>`;
+const ICON = {
+  pastor: shell("#c4421b"), suadero: shell("#7a3b1d"),
+  gringa: '<svg width="54" height="54" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" fill="#f3dfb6"/><path d="M6 20a14 14 0 0 0 28 0z" fill="#e8c98a"/><path d="M9 20h22" stroke="#f2b705" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="15" r="1.4" fill="#c8a06a"/><circle cx="25" cy="13" r="1.4" fill="#c8a06a"/></svg>',
+  quesa: '<svg width="54" height="54" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 27a15 15 0 0 1 30 0z" fill="#d9a441"/><path d="M9 27c3 2 6 1 8 3s6-1 9 0 6-1 9-3" fill="none" stroke="#f7e07a" stroke-width="3" stroke-linecap="round"/><path d="M5 27h30" stroke="#8a5a1a" stroke-width="2"/></svg>',
+  jamaica: glass("#a8174f"), horchata: glass("#efe2c8"),
+  refresco: '<svg width="54" height="54" viewBox="0 0 40 40" aria-hidden="true"><path d="M16 4h8v5l3 4v21a2 2 0 0 1-2 2H15a2 2 0 0 1-2-2V13l3-4z" fill="#5b2a1a"/><rect x="13" y="17" width="14" height="8" fill="#b3261e"/><rect x="16" y="2" width="8" height="3" rx="1" fill="#c9b9a8"/></svg>'
+};
+const MENU = [
+  {cat:"Tacos", nota:"Orden de 5 tacos en tortilla de maíz hecha a mano, con cebolla, cilantro y salsas de la casa.", items:[
+    {n:"Orden de pastor", d:"Del trompo, con piña", p:85, i:"pastor", top:true},
+    {n:"Orden de suadero", d:"Dorado en su jugo", p:90, i:"suadero"},
+    {n:"Campechanos", d:"Suadero con longaniza", p:95, i:"suadero"}]},
+  {cat:"Especiales", nota:"Para los que quieren algo más.", items:[
+    {n:"Gringa de pastor", d:"Tortilla de harina, pastor y queso gratinado", p:65, i:"gringa", top:true},
+    {n:"Quesadilla", d:"Maíz hecho a mano, queso Chihuahua", p:40, i:"quesa"}]},
+  {cat:"Bebidas", nota:"Frías y de la casa.", items:[
+    {n:"Agua de jamaica 1 L", d:"Natural, poco azúcar", p:35, i:"jamaica"},
+    {n:"Horchata 1 L", d:"Con canela", p:35, i:"horchata"},
+    {n:"Refresco 600 ml", d:"Coca-Cola, Fanta o Sprite", p:25, i:"refresco"}]}
+];
+
+/* ===== Lógica ===== */
+const $ = id => document.getElementById(id);
+const fmt = n => "$" + n.toLocaleString("es-MX");
+const slug = s => s.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-");
+const qty = {}, price = {};
+let domicilio = false;
+
+/* papel picado del borde superior */
+let d = "M0 0H400V12"; for (let x = 400; x > 0; x -= 20) d += `L${x-10} 22L${x-20} 12`; $("papel-path").setAttribute("d", d + "Z");
+
+MENU.forEach(c => {
+  $("cats").insertAdjacentHTML("beforeend", `<a href="#${slug(c.cat)}">${c.cat}</a>`);
+  let h = `<section data-cat id="${slug(c.cat)}"><h2>${c.cat}</h2><p class="cat-note">${c.nota}</p><div class="list">`;
+  c.items.forEach(it => {
+    qty[it.n] = 0; price[it.n] = it.p;
+    h += `<article class="item"><div class="pic">${ICON[it.i]}</div><div class="info">
+      <div class="name">${it.n}${it.top ? '<span class="tag">El más pedido</span>' : ""}</div>
+      <div class="desc">${it.d}</div>
+      <div class="row"><span class="price">${fmt(it.p)}</span><span class="ctl" data-n="${it.n}"></span></div>
+    </div></article>`;
+  });
+  $("menu").insertAdjacentHTML("beforeend", h + "</div></section>");
+});
+$("menu").insertAdjacentHTML("beforeend", `<div class="info-block"><b>Antes de pedir</b>
+  <span>Domicilio en colonias a menos de 3 km, costo $25. Tiempo aproximado: 30 a 45 minutos.</span>
+  <span>Tu pedido llega al WhatsApp del negocio y ahí te confirman el total y la hora.</span></div>`);
+
+function ctl(n){
+  const q = qty[n];
+  return q ? `<span class="step"><button type="button" data-d="-1" aria-label="Quitar uno de ${n}">−</button><span>${q}</span><button type="button" data-d="1" aria-label="Agregar otro ${n}">+</button></span>`
+           : `<button class="add" type="button" data-d="1" aria-label="Agregar ${n}">Agregar</button>`;
+}
+function paintCtl(n){ document.querySelectorAll(".ctl").forEach(e => { if (e.dataset.n === n) e.innerHTML = ctl(n); }); }
+Object.keys(qty).forEach(paintCtl);
+
+let tt;
+function toast(t){ const e = $("toast"); e.textContent = t; e.hidden = false; clearTimeout(tt); tt = setTimeout(() => e.hidden = true, 1400); }
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button[data-d]"); if (!b) return;
+  const n = b.closest("[data-n]").dataset.n, dd = +b.dataset.d;
+  qty[n] = Math.max(0, qty[n] + dd);
+  paintCtl(n); update();
+  if (dd > 0) { toast(`Agregaste ${n}`); const c = $("open-cart"); c.classList.add("bump"); setTimeout(() => c.classList.remove("bump"), 160); }
+});
+
+function totals(){
+  let sub = 0, n = 0;
+  for (const k in qty){ sub += qty[k]*price[k]; n += qty[k]; }
+  return {n, total: sub + (n && domicilio ? NEGOCIO.envio : 0)};
+}
+function message(){
+  const {total} = totals(), v = id => $(id).value.trim();
+  let t = `Hola ${NEGOCIO.nombre}, quiero hacer un pedido:\n`;
+  for (const k in qty) if (qty[k]) t += `• ${qty[k]} x ${k} (${fmt(qty[k]*price[k])})\n`;
+  if (domicilio) t += `• Envío a domicilio (${fmt(NEGOCIO.envio)})\n`;
+  t += `Total: ${fmt(total)}\n\n${domicilio ? "A domicilio" + (v("dir") ? ": " + v("dir") : "") : "Paso a recoger"}\nPago: ${v("pago")}`;
+  if (v("nom")) t += `\nNombre: ${v("nom")}`;
+  if (v("nota")) t += `\nIndicaciones: ${v("nota")}`;
+  return t;
+}
+function update(){
+  const {n, total} = totals();
+  $("cartbar").hidden = !n;
+  $("cart-n").textContent = n; $("cart-t").textContent = fmt(total); $("total").textContent = fmt(total);
+  $("lines").innerHTML = Object.keys(qty).filter(k => qty[k]).map(k => `<div class="line"><span><span class="q">${qty[k]} ×</span> ${k}</span><span>${fmt(qty[k]*price[k])}</span></div>`).join("")
+    + (domicilio && n ? `<div class="line"><span class="q">Envío a domicilio</span><span>${fmt(NEGOCIO.envio)}</span></div>` : "");
+  const msg = message();
+  $("preview").textContent = msg;
+  $("send").href = `https://wa.me/${NEGOCIO.whatsapp}?text=${encodeURIComponent(msg)}`;
+  $("send").setAttribute("aria-disabled", n ? "false" : "true");
+  if (!n && !$("sheet").hidden) closeSheet();
+}
+["nom","dir","pago","nota"].forEach(id => $(id).addEventListener("input", update));
+function setTipo(dom){ domicilio = dom; $("t-dom").setAttribute("aria-pressed", dom); $("t-llevar").setAttribute("aria-pressed", !dom); $("dir-l").hidden = !dom; update(); }
+$("t-dom").onclick = () => setTipo(true); $("t-llevar").onclick = () => setTipo(false);
+
+function openSheet(){ $("toast").hidden = true; $("sheet").hidden = false; $("scrim").hidden = false; $("close").focus(); }
+function closeSheet(){ $("sheet").hidden = true; $("scrim").hidden = true; }
+$("open-cart").onclick = openSheet; $("close").onclick = closeSheet; $("scrim").onclick = closeSheet;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
+/* Abierto o cerrado según la hora local del negocio */
+(function(){
+  try{
+    const p = new Intl.DateTimeFormat("en-US",{timeZone:NEGOCIO.zona,weekday:"short",hour:"numeric",hourCycle:"h23"}).formatToParts(new Date());
+    const wd = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(p.find(x=>x.type==="weekday").value);
+    const h = +p.find(x=>x.type==="hour").value % 24;
+    const today = NEGOCIO.horario[wd], prev = NEGOCIO.horario[(wd+6)%7];
+    const open = (today && h >= today[0] && h < today[1]) || (prev && prev[1] > 24 && h < prev[1]-24);
+    $("estado-txt").textContent = open ? "Abierto ahora" : "Cerrado · deja tu pedido";
+    if (!open) $("estado").classList.add("cerrado");
+  }catch(e){ $("estado").hidden = true; }
+})();
+
+/* Resalta la categoría visible */
+const links = [...document.querySelectorAll("#cats a")];
+links[0].classList.add("on");
+if ("IntersectionObserver" in window){
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + en.target.id)); }), {rootMargin:"-40% 0px -55% 0px"});
+  document.querySelectorAll("[data-cat]").forEach(s => io.observe(s));
+}
+update();
+</script>
+
+</body>
+</html>
