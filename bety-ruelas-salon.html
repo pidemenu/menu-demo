@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bety Ruelas Salón</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Muestra de página de citas para Bety Ruelas Salón, preparada por PideMenú.">
+<meta property="og:title" content="Bety Ruelas Salón · muestra de citas en línea">
+<meta property="og:description" content="Así se vería tu página para agendar citas por WhatsApp.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=1200&q=70&h=630">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Playfair+Display:wght@700;800&family=Oswald:wght@600;700&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: app de pedidos móvil (máx. 600px). Portada con foto, destacados en carrusel, menú con foto a la derecha, ficha de producto y carrito como hojas inferiores. */
+:root{
+  --bg:#faf7f3; --surface:#ffffff; --sunk:#f2ece5; --ink:#1c1512; --muted:#76665c; --line:#e9dfd4;
+  --chile:#c42b1c; --chile-ink:#ffffff; --maiz:#f4b400; --wa:#128c4b; --wa-ink:#ffffff;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:18px; --shadow:0 1px 2px rgba(28,21,18,.06),0 8px 24px rgba(28,21,18,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#130e0c; --surface:#1d1613; --sunk:#271e1a; --ink:#f6ece3; --muted:#b5a396; --line:#352822;
+  --chile:#d8402f; --maiz:#f6c234; --wa:#1c9b58; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#130e0c; --surface:#1d1613; --sunk:#271e1a; --ink:#f6ece3; --muted:#b5a396; --line:#352822;
+  --chile:#d8402f; --maiz:#f6c234; --wa:#1c9b58; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--maiz);outline-offset:2px}
+img{max-width:100%;display:block}
+.ph{background:linear-gradient(135deg,var(--maiz),var(--chile))} /* fondo si la foto no carga */
+
+/* Portada */
+.hero{position:relative;min-height:300px;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--herobg,#2a1a12)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.25) 40%,rgba(15,8,5,.88) 100%)}
+.hero .wrap{position:relative;z-index:1;width:100%;padding-block:56px 22px}
+.badge-demo{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:2;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;white-space:nowrap;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}
+.demo-note{margin:14px 0 0;font-size:13px;color:var(--muted);background:var(--sunk);border-radius:12px;padding:10px 12px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--maiz)}
+.hero h1{font:800 clamp(34px,10vw,46px)/.95 var(--display);letter-spacing:-.02em;margin:6px 0 8px;text-wrap:balance}
+.hero p{margin:0;opacity:.9;font-size:15px;max-width:40ch}
+.status{display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:700}
+.status i{width:8px;height:8px;border-radius:50%;background:#5ee39a;box-shadow:0 0 0 3px rgba(94,227,154,.25)}
+.status.off i{background:#ffb27a;box-shadow:0 0 0 3px rgba(255,178,122,.25)}
+
+/* Datos rápidos */
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:-18px;position:relative;z-index:2}
+.quick div{background:var(--surface);border-radius:14px;box-shadow:var(--shadow);padding:10px 8px;text-align:center;min-width:0}
+.quick b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
+.quick span{font-size:12px;color:var(--muted)}
+
+/* Promo */
+.promo{margin-top:16px;display:flex;gap:12px;align-items:center;background:var(--ink);color:var(--bg);border-radius:var(--r);padding:14px 16px}
+.promo .pct{flex:none;width:48px;height:48px;border-radius:12px;background:var(--maiz);color:#2a1d00;display:grid;place-items:center;font:800 15px/1 var(--display)}
+.promo b{display:block;font-size:15px}
+.promo span{font-size:13px;opacity:.75}
+
+/* Búsqueda + categorías */
+.bar{position:sticky;top:0;z-index:6;background:var(--bg);padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid transparent;transition:border-color .2s}
+.bar.stuck{border-color:var(--line)}
+.bar .wrap{display:grid;gap:10px;padding-block:12px 10px}
+.search{display:flex;align-items:center;gap:8px;background:var(--sunk);border-radius:12px;padding:0 12px}
+.search input{border:0;background:transparent;padding:11px 0;width:100%;outline:none}
+.cats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cats a{flex:none;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:7px 14px;border-radius:99px;border:1px solid var(--line)}
+.cats a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+main{padding-bottom:120px}
+h2{font:800 24px/1.1 var(--display);letter-spacing:-.01em;margin:28px 0 4px;scroll-margin-top:120px}
+.sec-note{color:var(--muted);font-size:14px;margin:0 0 12px}
+
+/* Destacados */
+.feat{display:grid;grid-auto-flow:column;grid-auto-columns:72%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;scrollbar-width:none}
+.feat::-webkit-scrollbar{display:none}
+.fcard{scroll-snap-align:start;border:0;padding:0;text-align:left;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.fcard .img{aspect-ratio:4/3;width:100%;object-fit:cover}
+.fcard div{padding:10px 12px 12px}
+.fcard b{display:block;font-size:16px}
+.fcard span{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+
+/* Lista */
+.list{display:grid}
+.item{display:grid;grid-template-columns:1fr 104px;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%}
+.item:last-child{border-bottom:0}
+.item .t{min-width:0;display:grid;gap:3px}
+.item b{font-size:16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item p{margin:0;color:var(--muted);font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item .pr{font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px}
+.thumb{position:relative;width:104px;height:104px}
+.thumb img{width:104px;height:104px;border-radius:14px;object-fit:cover}
+.plus{position:absolute;right:-4px;bottom:-4px;width:34px;height:34px;border-radius:50%;background:var(--surface);color:var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;font-size:22px;font-weight:600;line-height:1;border:1px solid var(--line)}
+.plus.has{background:var(--chile);color:#fff;border-color:var(--chile);font-size:15px;font-weight:800}
+.tag{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--maiz);color:#2a1d00;border-radius:6px;padding:2px 6px}
+.drink{grid-template-columns:1fr auto}
+.empty{color:var(--muted);padding:20px 0;text-align:center}
+
+/* Información */
+.info{display:grid;gap:12px;margin-top:8px}
+.card{background:var(--surface);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card h3{font:800 18px/1.2 var(--display);margin:0 0 10px}
+.hours{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.hours td{padding:5px 0;border-bottom:1px dashed var(--line)}
+.hours tr:last-child td{border-bottom:0}
+.hours td:last-child{text-align:right;color:var(--muted)}
+.hours tr.today td{font-weight:700;color:var(--ink)}
+.addr{font-size:14px;color:var(--muted);margin:0 0 12px}
+.btn2{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:99px;padding:9px 14px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;background:var(--surface)}
+.pays{display:flex;flex-wrap:wrap;gap:8px}
+.pays span{background:var(--sunk);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:28px 0 0}
+footer a{color:inherit;font-weight:700}
+
+/* Barra carrito */
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:8;padding-top:16px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 60%,transparent)}
+.cartbtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:16px;background:var(--wa);color:var(--wa-ink);padding:15px 18px;font-weight:700;font-size:16px;box-shadow:0 10px 30px rgba(18,140,75,.35);transition:transform .15s}
+.cartbtn .n{background:rgba(255,255,255,.22);border-radius:8px;padding:2px 9px;font-variant-numeric:tabular-nums}
+.cartbtn.bump{transform:scale(1.025)}
+
+/* Hojas */
+.scrim{position:fixed;inset:0;background:rgba(10,6,4,.55);z-index:20}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-height:92%;overflow:auto;background:var(--surface);border-radius:24px 24px 0 0;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.sheet .wrap{display:grid;gap:14px}
+.sheet .x{position:absolute;top:12px;right:max(12px,env(safe-area-inset-right,0px));z-index:2;width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;font-size:15px}
+.pimg{width:100%;aspect-ratio:16/10;object-fit:cover}
+.ptitle{font:800 24px/1.1 var(--display);margin:4px 0 0}
+.pdesc{color:var(--muted);margin:0}
+.group{display:grid;gap:8px}
+.group h4{margin:0;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.group h4 small{font-weight:600;color:var(--muted);font-size:12px;background:var(--sunk);border-radius:6px;padding:2px 7px}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;font-size:15px}
+.opt input{width:20px;height:20px;accent-color:var(--chile);margin:0;flex:none}
+.opt span{flex:1}
+.opt em{font-style:normal;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.addrow{display:flex;gap:10px;align-items:center;position:sticky;bottom:0;background:var(--surface);padding-top:8px}
+.stepper{display:flex;align-items:center;gap:2px;background:var(--sunk);border-radius:14px;padding:4px}
+.stepper button{width:40px;height:40px;border:0;border-radius:10px;background:var(--surface);font-size:20px;font-weight:700}
+.stepper span{min-width:28px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.primary{flex:1;border:0;border-radius:14px;background:var(--chile);color:var(--chile-ink);font-weight:800;font-size:16px;padding:15px;display:flex;justify-content:space-between}
+.chead{padding-top:18px}
+.chead h3{font:800 24px/1 var(--display);margin:0}
+.cline{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.cline small{grid-column:1;color:var(--muted);font-size:13px}
+.cline .ctrl{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.mini{display:flex;align-items:center;gap:2px;background:var(--sunk);border-radius:10px;padding:2px}
+.mini button{width:28px;height:28px;border:0;border-radius:8px;background:var(--surface);font-weight:800}
+.mini span{min-width:20px;text-align:center;font-weight:700;font-size:14px}
+.sum{display:grid;gap:4px;font-variant-numeric:tabular-nums}
+.sum div{display:flex;justify-content:space-between;color:var(--muted);font-size:15px}
+.sum .tot{color:var(--ink);font-weight:800;font-size:19px;margin-top:4px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;border-radius:9px;padding:10px;background:transparent;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+label.f{font-size:14px;font-weight:600;display:grid;gap:6px}
+.f input,.f select,.f textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}
+.pv{font-size:12px;color:var(--muted);margin:0 0 6px}
+.preview{font-family:var(--body);background:var(--sunk);border-radius:12px;padding:12px;font-size:13px;white-space:pre-wrap;color:var(--muted);margin:0}
+.send{border:0;border-radius:14px;background:var(--wa);color:var(--wa-ink);font-weight:800;font-size:17px;padding:16px;display:flex;justify-content:center;gap:10px;align-items:center;text-decoration:none}
+.send[aria-disabled="true"]{opacity:.5;pointer-events:none}
+.fine{font-size:12px;color:var(--muted);text-align:center;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:14px;font-weight:700;z-index:30;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}
+:root,:root[data-theme="light"]{--chile:#141414;--chile-ink:#fff;--maiz:#d8cfc2;--maiz-ink:#1a1a1a;--herobg:#0f0f0f;--display:"Playfair Display",Georgia,serif;--bg:#fbfaf8;--sunk:#f1efeb;--line:#e6e2db;}
+.tag,.promo .pct{color:var(--maiz-ink)}
+.hero h1{font-family:var(--display)}
+.hero h1{font-weight:700;letter-spacing:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+<style>
+/* Citas: servicios seleccionables, días y horas como chips */
+.svc{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%}
+.svc:last-child{border-bottom:0}
+.svc .t{display:grid;gap:3px;min-width:0}
+.svc b{font-size:16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.svc p{margin:0;color:var(--muted);font-size:14px}
+.svc .meta{font-size:14px;font-variant-numeric:tabular-nums;display:flex;gap:10px}
+.svc .meta strong{font-weight:700}
+.svc .meta span{color:var(--muted)}
+.check{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;color:transparent;flex:none}
+.svc[aria-pressed="true"] .check{background:var(--chile);border-color:var(--chile);color:var(--chile-ink)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.gal img{aspect-ratio:1;width:100%;object-fit:cover;border-radius:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:8px 12px;font-weight:700;font-size:14px;text-align:center;font-variant-numeric:tabular-nums}
+.chip small{display:block;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.chip[aria-pressed="true"]{background:var(--chile);border-color:var(--chile);color:var(--chile-ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.8}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px}
+.sheet .wrap{grid-template-columns:minmax(0,1fr)}
+.lbl{font-size:14px;font-weight:700;margin:0 0 8px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="badge-demo">Muestra para Bety Ruelas Salón · hecha por PideMenú</span>
+  <img class="ph" src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=1200&q=70" alt="Estilista secando y peinando a una clienta" fetchpriority="high" onerror="this.alt='';this.removeAttribute('src')">
+  <div class="wrap">
+    <div class="kicker">Salón · Diseño de color, maquillaje y peinado</div>
+    <h1>Bety Ruelas Salón</h1>
+    <p>Diseño de color, corte, maquillaje, peinado y extensiones. Agenda tu cita.</p>
+    <div class="status" id="status"><i></i><span id="status-txt">Abierto ahora</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="quick"><div><b>5.0 ★</b><span>6 reseñas en Google</span></div><div><b>9 a.m.</b><span>abre de lunes a sábado</span></div><div><b>WhatsApp</b><span>te confirman la cita</span></div></div>
+  <div class="promo"><div class="pct">★ 5.0</div><div><b>“Los mejores diseños para el pelo de acuerdo a tu rostro, edad y ritmo de vida.”</b><span>Reseña en Google Maps</span></div></div>
+  <p class="demo-note">Muestra preparada por PideMenú con los datos públicos de su perfil de Google Maps. Precios, horario y fotos son de ejemplo: en la versión final van los suyos.</p>
+</div>
+
+<main class="wrap" id="menu"></main>
+
+<div class="cartbar" id="cartbar" hidden><div class="wrap">
+  <button class="cartbtn" id="open-cart" type="button"><span class="n" id="cart-n">0</span><span>Elegir día y hora</span><span id="cart-t">$0</span></button>
+</div></div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<section class="sheet" id="cart" role="dialog" aria-modal="true" aria-labelledby="c-title" hidden>
+  <div class="wrap chead">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 id="c-title">Tu cita</h3><button class="btn2" type="button" data-close>Cambiar servicios</button></div>
+    <div id="c-lines"></div>
+    <div class="sum" id="c-sum"></div>
+    <div><p class="lbl">Día</p><div class="chips" id="days"></div></div>
+    <div><p class="lbl">Hora</p><div class="slots" id="slots"></div></div>
+    <label class="f" for="c-who" id="c-who-l">¿Con quién?<select id="c-who"></select></label>
+    <label class="f" for="c-name">Tu nombre<input id="c-name" autocomplete="name" placeholder="Ej. Daniela"></label>
+    <label class="f" for="c-note">Algo que debamos saber (opcional)<textarea id="c-note" rows="2" placeholder="Ej. es para una boda a las 6 p.m."></textarea></label>
+    <div><p class="pv">Así le llega tu mensaje al negocio:</p><pre class="preview" id="c-preview"></pre></div>
+    <a class="send" id="c-send" href="#" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+      <span>Pedir cita por WhatsApp</span>
+    </a>
+    <p class="fine" id="c-fine">Se abre WhatsApp con tu cita ya escrita. El negocio te confirma si el horario está libre.</p>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* ===================== DATOS DEL NEGOCIO ===================== */
+const NEGOCIO = {"nombre": "Bety Ruelas Salón", "whatsapp": "", "zona": "America/Mazatlan", "direccion": "Hermes 4011-3, Canaco, Solidaridad, Culiacán, Sin.", "mapa": "https://www.google.com/maps/search/?api=1&query=Bety+Ruelas+Salón+Hermes+4011-3,+Canaco,+Solidaridad,+Culiacán,+Sin.", "pagos": ["Efectivo", "Transferencia", "Tarjeta"], "horario": [null, [9, 19], [9, 19], [9, 19], [9, 19], [9, 19], [9, 19]], "horarioNota": "Horario de ejemplo: la apertura es la de Google Maps; el cierre y los días se ajustan con los suyos.", "paso": 30, "equipo": []};
+const SERVICIOS = [{"cat": "Color", "nota": "Precio final según largo y cantidad de cabello.", "items": [{"id": "color", "n": "Diseño de color", "d": "Balayage, babylights o iluminaciones a la medida.", "p": 1200, "m": 180, "desde": true, "top": true}, {"id": "tinte", "n": "Tinte global", "d": "Un solo tono, raíz a puntas.", "p": 650, "m": 90, "desde": true}]}, {"cat": "Corte y peinado", "nota": "Incluye lavado.", "items": [{"id": "corte", "n": "Corte de dama", "d": "Diseñado según tu rostro.", "p": 350, "m": 45, "top": true}, {"id": "peinado", "n": "Peinado de evento", "d": "Recogido, semirecogido u ondas.", "p": 550, "m": 60, "desde": true}]}, {"cat": "Maquillaje y extensiones", "nota": "Para eventos y día a día.", "items": [{"id": "maqui", "n": "Maquillaje social", "d": "Incluye pestañas.", "p": 650, "m": 60, "top": true}, {"id": "ext", "n": "Extensiones", "d": "Valoración y colocación.", "p": 2500, "m": 150, "desde": true}]}];
+const GALERIA = [["https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=600&q=70", "Peinado con secadora"], ["https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=70", "Maquillaje"], ["https://images.unsplash.com/photo-1769869174682-19e960909bdb?auto=format&fit=crop&w=600&q=70", "Peinado de evento"]];
+const GALERIA_NOTA = "Fotos de ejemplo: aquí van las de tu trabajo.";
+
+/* ===================== LÓGICA ===================== */
+const $ = id => document.getElementById(id);
+const fmt = n => "$" + n.toLocaleString("es-MX");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ALL = Object.fromEntries(SERVICIOS.flatMap(c => c.items).map(i => [i.id, i]));
+const DIAS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const DCORTO = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const MES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+let sel = [], day = null, slot = null;
+const hh = m => { const h = Math.floor(m / 60), mi = m % 60; return ((h % 12) || 12) + ":" + String(mi).padStart(2, "0") + (h < 12 ? " a.m." : " p.m."); };
+const dur = m => m >= 60 ? (Math.floor(m / 60) + " h" + (m % 60 ? " " + (m % 60) + " min" : "")) : m + " min";
+
+function localNow(){
+  try{ const p = new Intl.DateTimeFormat("en-US",{timeZone:NEGOCIO.zona,year:"numeric",month:"numeric",day:"numeric",weekday:"short",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(new Date());
+    const g = t => p.find(x => x.type === t).value;
+    return {wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(g("weekday")), h:+g("hour") % 24, mi:+g("minute"), y:+g("year"), mo:+g("month") - 1, d:+g("day")}; }
+  catch(e){ const d = new Date(); return {wd:d.getDay(), h:d.getHours(), mi:d.getMinutes(), y:d.getFullYear(), mo:d.getMonth(), d:d.getDate()}; }
+}
+
+function render(){
+  let h = "";
+  SERVICIOS.forEach(c => {
+    h += `<section><h2>${c.cat}</h2><p class="sec-note">${c.nota}</p><div class="list">` + c.items.map(i => {
+      const on = sel.includes(i.id);
+      return `<button class="svc" type="button" data-s="${i.id}" aria-pressed="${on}">
+        <div class="t"><b>${esc(i.n)}${i.top ? '<span class="tag">Más pedido</span>' : ""}</b><p>${esc(i.d)}</p>
+        <div class="meta"><strong>${i.desde ? "Desde " : ""}${fmt(i.p)}</strong><span>${dur(i.m)}</span></div></div>
+        <span class="check" aria-hidden="true">✓</span></button>`;
+    }).join("") + `</div></section>`;
+  });
+  if (GALERIA.length) h += `<h2>Nuestro trabajo</h2><p class="sec-note">${GALERIA_NOTA}</p><div class="gal">${GALERIA.map(([src, alt]) => `<img class="ph" src="${src}" alt="${esc(alt)}" loading="lazy" onerror="this.alt='';this.removeAttribute('src')">`).join("")}</div>`;
+  h += infoHTML();
+  $("menu").innerHTML = h;
+}
+
+function infoHTML(){
+  const today = localNow().wd;
+  const rows = [1,2,3,4,5,6,0].map(d => `<tr class="${d === today ? "today" : ""}"><td>${DIAS[d]}</td><td>${NEGOCIO.horario[d] ? hh(NEGOCIO.horario[d][0] * 60) + " a " + hh(NEGOCIO.horario[d][1] * 60) : "Cerrado"}</td></tr>`).join("");
+  return `<h2>Información</h2><div class="info">
+    <div class="card"><h3>Horario</h3><table class="hours">${rows}</table>${NEGOCIO.horarioNota ? `<p class="addr" style="margin:10px 0 0">${NEGOCIO.horarioNota}</p>` : ""}</div>
+    <div class="card"><h3>Ubicación</h3><p class="addr">${esc(NEGOCIO.direccion)}</p><a class="btn2" href="${NEGOCIO.mapa}" target="_blank" rel="noopener">Cómo llegar</a></div>
+    <div class="card"><h3>Formas de pago</h3><div class="pays">${NEGOCIO.pagos.map(p => `<span>${p}</span>`).join("")}</div></div>
+  </div><footer>Muestra de página de citas hecha por <a href="https://pidemenu.github.io/menu-demo/" target="_blank" rel="noopener">PideMenú</a></footer>`;
+}
+
+function totals(){ const its = sel.map(id => ALL[id]); return {n: its.length, p: its.reduce((s, i) => s + i.p, 0), m: its.reduce((s, i) => s + i.m, 0), desde: its.some(i => i.desde)}; }
+
+function days(){
+  const n = localNow(), out = [];
+  for (let k = 0; out.length < 7 && k < 14; k++){
+    const dt = new Date(Date.UTC(n.y, n.mo, n.d + k)), wd = dt.getUTCDay(), hr = NEGOCIO.horario[wd];
+    if (!hr) continue;
+    if (k === 0 && (n.h * 60 + n.mi) > hr[1] * 60 - 60) continue;
+    out.push({k, wd, dd: dt.getUTCDate(), mo: dt.getUTCMonth(), label: k === 0 ? "Hoy" : k === 1 ? "Mañana" : DCORTO[wd]});
+  }
+  return out;
+}
+function slots(d){
+  if (!d) return [];
+  const hr = NEGOCIO.horario[d.wd], n = localNow(), {m} = totals(), out = [];
+  for (let t = hr[0] * 60; t + Math.max(m, 30) <= hr[1] * 60; t += NEGOCIO.paso){
+    if (d.k === 0 && t < n.h * 60 + n.mi + 30) continue;
+    out.push(t);
+  }
+  return out;
+}
+
+function message(){
+  const {p, m, desde} = totals(), its = sel.map(id => ALL[id]);
+  let t = `Hola ${NEGOCIO.nombre}, quiero agendar una cita:\n\n`;
+  its.forEach(i => t += `• ${i.n} — ${i.desde ? "desde " : ""}${fmt(i.p)}\n`);
+  t += `\nTotal aprox.: ${desde ? "desde " : ""}${fmt(p)} · ${dur(m)}\n`;
+  if (day) t += `Día: ${DIAS[day.wd]} ${day.dd} de ${MES[day.mo]}\n`;
+  if (slot != null) t += `Hora: ${hh(slot)}\n`;
+  const who = $("c-who").value; if (NEGOCIO.equipo.length && who !== NEGOCIO.equipo[0]) t += `Con: ${who}\n`;
+  const v = id => $(id).value.trim();
+  if (v("c-name")) t += `Nombre: ${v("c-name")}\n`;
+  if (v("c-note")) t += `Nota: ${v("c-note")}\n`;
+  return t.trim();
+}
+
+function refresh(){
+  const {n, p, m, desde} = totals();
+  $("cart-n").textContent = n; $("cart-t").textContent = (desde ? "desde " : "") + fmt(p);
+  $("cartbar").hidden = !n || !$("cart").hidden;
+  $("c-lines").innerHTML = sel.map(id => { const i = ALL[id]; return `<div class="cline"><b>${esc(i.n)}</b><small>${dur(i.m)}</small><div class="ctrl"><span style="font-weight:700;font-variant-numeric:tabular-nums">${i.desde ? "desde " : ""}${fmt(i.p)}</span><button class="btn2" style="padding:4px 10px;font-size:13px" type="button" data-rm="${id}">Quitar</button></div></div>`; }).join("");
+  $("c-sum").innerHTML = `<div class="tot"><span>Total aprox.</span><span>${desde ? "desde " : ""}${fmt(p)}</span></div><div><span>Duración</span><span>${dur(m)}</span></div>`;
+  const ds = days(); if (!day || !ds.find(d => d.k === day.k)) day = ds[0] || null;
+  $("days").innerHTML = ds.map(d => `<button class="chip" type="button" data-k="${d.k}" aria-pressed="${day && d.k === day.k}"><small>${d.label}</small>${d.dd} ${MES[d.mo]}</button>`).join("");
+  const ss = slots(day); if (slot != null && !ss.includes(slot)) slot = null;
+  $("slots").innerHTML = ss.length ? ss.map(t => `<button class="chip" type="button" data-t="${t}" aria-pressed="${t === slot}">${hh(t)}</button>`).join("") : `<p class="fine" style="text-align:left">No quedan horas este día. Elige otro.</p>`;
+  $("c-preview").textContent = message();
+  const ok = n && day && slot != null;
+  $("c-send").href = `https://wa.me/${NEGOCIO.whatsapp}?text=${encodeURIComponent(message())}`;
+  $("c-send").setAttribute("aria-disabled", ok ? "false" : "true");
+  $("c-fine").textContent = ok ? "Se abre WhatsApp con tu cita ya escrita. El negocio te confirma si el horario está libre." : "Elige día y hora para enviar.";
+  if (!n && !$("cart").hidden) hide();
+}
+
+document.addEventListener("click", e => {
+  const s = e.target.closest("[data-s]");
+  if (s){ const id = s.dataset.s; sel = sel.includes(id) ? sel.filter(x => x !== id) : [...sel, id]; s.setAttribute("aria-pressed", sel.includes(id)); if (sel.includes(id)){ toast("Agregaste " + ALL[id].n); bump(); } refresh(); }
+  const k = e.target.closest("[data-k]"); if (k){ day = days().find(d => d.k === +k.dataset.k); slot = null; refresh(); }
+  const t = e.target.closest("[data-t]"); if (t){ slot = +t.dataset.t; refresh(); }
+  const r = e.target.closest("[data-rm]"); if (r){ sel = sel.filter(x => x !== r.dataset.rm); render(); refresh(); }
+  if (e.target.closest("[data-close]")) hide();
+});
+$("c-who").innerHTML = NEGOCIO.equipo.map(x => `<option>${esc(x)}</option>`).join("");
+$("c-who-l").hidden = !NEGOCIO.equipo.length;
+["c-name","c-note","c-who"].forEach(id => $(id).addEventListener("input", refresh));
+function show(id){ $("scrim").hidden = false; $(id).hidden = false; $("cartbar").hidden = true; $("toast").hidden = true; $(id).scrollTop = 0; document.body.style.overflow = "hidden"; }
+function hide(){ $("cart").hidden = true; $("scrim").hidden = true; document.body.style.overflow = ""; render(); $("cartbar").hidden = !totals().n; }
+$("scrim").onclick = hide; document.addEventListener("keydown", e => { if (e.key === "Escape") hide(); });
+$("open-cart").onclick = () => { refresh(); show("cart"); };
+let tt; function toast(t){ const e = $("toast"); e.textContent = t; e.hidden = false; clearTimeout(tt); tt = setTimeout(() => e.hidden = true, 1600); }
+function bump(){ const c = $("open-cart"); c.classList.add("bump"); setTimeout(() => c.classList.remove("bump"), 160); }
+(function(){
+  const {wd, h} = localNow(), t = NEGOCIO.horario[wd];
+  const open = t && h >= t[0] && h < t[1];
+  $("status-txt").textContent = open ? "Abierto ahora · agenda tu cita" : "Cerrado ahora · deja tu cita para otro día";
+  if (!open) $("status").classList.add("off");
+})();
+render(); refresh();
+</script>
+</body>
+</html>
