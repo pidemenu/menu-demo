@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tacos Don Ruli · Menú</title>
+<style>
+:root{--bg:#fffaf3;--card:#fff;--ink:#2b1d12;--mut:#7a6a5c;--acc:#c2410c;--wa:#1f9d55;--line:#eadfce}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1410;--card:#241c16;--ink:#f6ece2;--mut:#b7a593;--line:#3a2e24}}
+:root[data-theme="dark"]{--bg:#1a1410;--card:#241c16;--ink:#f6ece2;--mut:#b7a593;--line:#3a2e24}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:110px}
+.demo{background:#fde68a;color:#3b2a00;text-align:center;font-size:13px;padding:6px 16px}
+header{padding:22px 16px 8px;max-width:640px;margin:auto}h1{margin:0;font-size:26px}header p{margin:4px 0;color:var(--mut);font-size:14px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 16px;max-width:640px;margin:auto;position:sticky;top:0;background:var(--bg);z-index:2}
+.tabs a{white-space:nowrap;padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink);text-decoration:none;font-size:14px}
+main{max-width:640px;margin:auto;padding:0 16px}h2{font-size:18px;margin:22px 0 8px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.item b{display:block}.item small{color:var(--mut)}.price{color:var(--acc);font-weight:600;margin-top:2px}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer}
+.qty span{min-width:18px;text-align:center;font-weight:600}
+form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:16px}
+label{display:block;font-size:14px;margin:8px 0 4px}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px}
+.bar div{max-width:640px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bar button{background:var(--wa);color:#fff;border:0;border-radius:99px;padding:12px 18px;font-size:16px;font-weight:600;cursor:pointer}.bar button:disabled{opacity:.45}
+</style></head><body>
+<div class="demo">Demostración con un negocio ficticio. Así se vería el menú de tu negocio.</div>
+<header><h1>Tacos Don Ruli</h1><p>Martes a domingo · 7:00 p.m. a 1:00 a.m.</p><p>Para llevar y a domicilio (zona centro, envío $25)</p></header>
+<nav class="tabs" id="tabs"></nav>
+<main id="menu"></main>
+<main><form id="f" onsubmit="return false">
+<h2 style="margin-top:0">Tus datos</h2>
+<label for="nom">Nombre</label><input id="nom" autocomplete="name">
+<label for="tipo">¿Cómo lo quieres?</label><select id="tipo"><option>Para recoger</option><option>A domicilio</option></select>
+<div id="dirw" hidden><label for="dir">Dirección</label><input id="dir" autocomplete="street-address"></div>
+<label for="pago">Forma de pago</label><select id="pago"><option>Efectivo</option><option>Transferencia</option></select>
+<label for="nota">Notas (sin cebolla, salsa aparte...)</label><textarea id="nota" rows="2"></textarea>
+</form></main>
+<div class="bar"><div><span><small id="cnt">0 productos</small><br><b id="tot">$0</b></span><button id="send" disabled>Pedir por WhatsApp</button></div></div>
+<script>
+const NEGOCIO="Tacos Don Ruli", WHATSAPP=""; // número del negocio con lada, ej. 526671234567
+const ENVIO=25;
+const MENU={"Tacos":[["Orden de pastor","5 tacos con piña, cebolla y cilantro",85],["Orden de suadero","5 tacos de suadero dorado",90],["Campechanos","5 tacos de suadero con longaniza",95]],
+"Especiales":[["Gringa","Harina, pastor y queso",65],["Quesadilla","Maíz hecho a mano, con queso",40]],
+"Bebidas":[["Agua fresca 1 L","Horchata o jamaica",35],["Refresco","600 ml",25]]};
+const q={};const fmt=n=>"$"+n.toLocaleString("es-MX");
+const menu=document.getElementById("menu"),tabs=document.getElementById("tabs");
+Object.entries(MENU).forEach(([cat,items],ci)=>{tabs.insertAdjacentHTML("beforeend",`<a href="#c${ci}">${cat}</a>`);
+let h=`<h2 id="c${ci}">${cat}</h2>`;items.forEach(([n,d,p])=>{q[n]=0;h+=`<div class="item"><div><b>${n}</b><small>${d}</small><div class="price">${fmt(p)}</div></div><div class="qty"><button aria-label="Quitar ${n}" data-n="${n}" data-d="-1">−</button><span id="q-${n}">0</span><button aria-label="Agregar ${n}" data-n="${n}" data-d="1">+</button></div></div>`});menu.insertAdjacentHTML("beforeend",h)});
+const price=Object.fromEntries(Object.values(MENU).flat().map(([n,,p])=>[n,p]));
+menu.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const n=b.dataset.n;q[n]=Math.max(0,q[n]+ +b.dataset.d);document.getElementById("q-"+n).textContent=q[n];upd()});
+const tipo=document.getElementById("tipo");tipo.onchange=()=>{document.getElementById("dirw").hidden=tipo.value!=="A domicilio";upd()};
+function total(){let s=0,c=0;for(const n in q){s+=q[n]*price[n];c+=q[n]}if(c&&tipo.value==="A domicilio")s+=ENVIO;return[s,c]}
+function upd(){const[s,c]=total();document.getElementById("tot").textContent=fmt(s);document.getElementById("cnt").textContent=c+(c==1?" producto":" productos");document.getElementById("send").disabled=!c}
+document.getElementById("send").onclick=()=>{const[s]=total();const v=id=>document.getElementById(id).value.trim();
+let t=`Hola ${NEGOCIO}, quiero hacer un pedido:\n`;for(const n in q)if(q[n])t+=`• ${q[n]} x ${n} (${fmt(q[n]*price[n])})\n`;
+if(tipo.value==="A domicilio")t+=`• Envío (${fmt(ENVIO)})\n`;t+=`Total: ${fmt(s)}\n\n${tipo.value}`;if(tipo.value==="A domicilio"&&v("dir"))t+=`: ${v("dir")}`;
+t+=`\nPago: ${v("pago")}`;if(v("nom"))t+=`\nNombre: ${v("nom")}`;if(v("nota"))t+=`\nNotas: ${v("nota")}`;
+window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(t)}`,"_blank")};
+</script></body></html>
