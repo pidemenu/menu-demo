@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Confirmar pedido</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#1c1b19;--mute:#6b675f;--line:#e4e0d6;--ok:#1f8f4e;--ok-ink:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#141412;--card:#1e1d1a;--ink:#f1eee7;--mute:#a9a499;--line:#34322d;--ok:#2fb36a;--ok-ink:#06210f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:440px;margin:0 auto;padding:24px 16px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+h1{font-size:1.35rem;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 14px}
+h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin:20px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+a.b{display:flex;align-items:center;justify-content:center;min-height:48px;padding:10px;border-radius:12px;text-decoration:none;font-weight:650;text-align:center;background:var(--ok);color:var(--ok-ink)}
+a.b.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.one{display:grid;gap:8px}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0;min-height:48px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font:inherit;background:var(--bg);color:var(--ink)}
+.row a.b{flex:0 0 auto;padding:0 16px}
+.err{color:var(--mute)}
+footer{color:var(--mute);font-size:.8rem;text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<main>
+  <div class="card" id="app"></div>
+  <footer>Confirmación de pedidos · PideMenu</footer>
+</main>
+<script>
+const p = new URLSearchParams(location.search);
+const folio = (p.get("f") || "").slice(0, 8), tel = (p.get("t") || "").replace(/\D/g, ""), neg = p.get("n") || "el negocio",
+      cli = (p.get("c") || "").trim(), tot = Number(p.get("tot")) || 0, dom = p.get("d") === "1";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = n => "$" + n.toLocaleString("es-MX");
+const hola = cli ? `Hola ${cli}` : "Hola";
+const wa = txt => `https://wa.me/${tel}?text=${encodeURIComponent(txt)}`;
+const conf = min => `${hola}, ${neg} confirma tu pedido *#${folio}*${tot ? ` por *${money(tot)}*` : ""}. ` +
+  (dom ? `Llega en aprox. ${min} min.` : `Estará listo para recoger en aprox. ${min} min.`) + " ¡Gracias por tu compra!";
+const app = document.getElementById("app");
+if (!tel || tel.length < 11) {
+  app.innerHTML = `<h1>Enlace incompleto</h1><p class="err">Este enlace no trae el número del cliente. Contéstale directo en su chat.</p>`;
+} else {
+  const mins = dom ? [30, 45, 60, 90] : [10, 15, 20, 30];
+  app.innerHTML = `
+    <h1>Pedido #${esc(folio)}</h1>
+    <p class="sub">${esc(cli || "Cliente")} · ${tot ? esc(money(tot)) + " · " : ""}${dom ? "A domicilio" : "Pasa a recoger"}</p>
+    <h2>Confirmar con tiempo</h2>
+    <div class="grid">${mins.map(m => `<a class="b" href="${wa(conf(m))}">${m} min</a>`).join("")}</div>
+    <div class="row" style="margin-top:8px"><input id="otro" inputmode="numeric" placeholder="Otro tiempo (min)" aria-label="Otro tiempo en minutos"><a class="b" id="otro-b" href="#">Enviar</a></div>
+    <h2>Después</h2>
+    <div class="one">
+      <a class="b alt" href="${wa(dom ? `${hola}, tu pedido #${folio} ya va en camino.` : `${hola}, tu pedido #${folio} ya está listo para recoger.`)}">${dom ? "Avisar que va en camino" : "Avisar que ya está listo"}</a>
+      <a class="b alt" href="${wa(`${hola}, sobre tu pedido #${folio}: se nos terminó un producto. ¿Te lo cambiamos por otro?`)}">Avisar que falta un producto</a>
+    </div>`;
+  const otro = document.getElementById("otro"), ob = document.getElementById("otro-b");
+  ob.onclick = e => { const m = parseInt(otro.value, 10); if (!m) { e.preventDefault(); otro.focus(); return; } ob.href = wa(conf(m)); };
+}
+</script>
+</body>
+</html>

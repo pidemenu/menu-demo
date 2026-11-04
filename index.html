@@ -235,6 +235,7 @@ label.f{font-size:14px;font-weight:600;display:grid;gap:6px}
     </div>
     <div class="sum" id="c-sum"></div>
     <label class="f" for="c-name">Tu nombre<input id="c-name" autocomplete="name" placeholder="Ej. Mariana"></label>
+    <label class="f" for="c-tel">Tu WhatsApp<input id="c-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="10 dígitos, para confirmarte tu pedido"></label>
     <label class="f" for="c-addr" id="c-addr-l" hidden>Dirección y referencia<input id="c-addr" autocomplete="street-address" placeholder="Calle, número, colonia, entre calles"></label>
     <label class="f" for="c-pay">Forma de pago<select id="c-pay"><option>Efectivo</option><option>Transferencia</option><option>Tarjeta al recibir</option></select></label>
     <label class="f" for="c-cash" id="c-cash-l">¿Con cuánto pagas?<input id="c-cash" inputmode="numeric" placeholder="Ej. 500, para llevarte cambio"></label>
@@ -243,7 +244,7 @@ label.f{font-size:14px;font-weight:600;display:grid;gap:6px}
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
       <span id="c-send-txt">Enviar pedido por WhatsApp</span>
     </a>
-    <p class="fine">Se abre WhatsApp con tu pedido ya escrito. El negocio te confirma total y hora.</p>
+    <p class="fine">Se abre WhatsApp con tu pedido ya escrito. El negocio te confirma por WhatsApp con tu número de pedido.</p>
   </div>
 </section>
 
@@ -293,6 +294,8 @@ const fmt = n => "$" + n.toLocaleString("es-MX");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ITEMS = Object.fromEntries(MENU.flatMap(c => c.items).map(i => [i.id, i]));
 let cart = [], delivery = false, cur = null;
+const CONFIRMA = "https://pidemenu.github.io/menu-demo/ok.html";
+const FOLIO = Array.from({length: 4}, () => "ABCDEFGHJKMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 31)]).join("");
 
 function imgTag(src, alt, cls){ return src ? `<img class="${cls||""} ph" src="${src}" alt="${esc(alt)}" loading="lazy" onerror="this.alt='';this.removeAttribute('src')">` : ""; }
 
@@ -369,14 +372,21 @@ $("p-add").onclick = () => {
 
 /* Carrito */
 function totals(){ const sub = cart.reduce((s, l) => s + l.unit * l.qty, 0), n = cart.reduce((s, l) => s + l.qty, 0); const env = delivery && n ? NEGOCIO.envio : 0; return {sub, n, env, total: sub + env}; }
+function telDigits(){ let d = $("c-tel").value.replace(/\D/g, ""); if (d.length === 10) d = "52" + d; return d.length >= 11 && d.length <= 13 ? d : ""; }
 function message(){
-  const {sub, env, total} = totals(), v = id => $(id).value.trim();
-  let t = `Hola ${NEGOCIO.nombre}, quiero hacer un pedido:\n\n`;
+  const {sub, env, total} = totals(), v = id => $(id).value.trim(), tel = telDigits();
+  const fecha = new Date().toLocaleString("es-MX", {weekday:"short", day:"numeric", month:"short", hour:"numeric", minute:"2-digit"});
+  let t = `Hola ${NEGOCIO.nombre}, quiero hacer un pedido.\n\n*PEDIDO #${FOLIO}*\n${fecha}\n\n`;
   cart.forEach(l => { t += `• ${l.qty} × ${l.n} — ${fmt(l.unit * l.qty)}\n`; if (l.sel.length) t += `   ${l.sel.join(", ")}\n`; if (l.note) t += `   Nota: ${l.note}\n`; });
-  t += `\nSubtotal: ${fmt(sub)}\n`; if (env) t += `Envío: ${fmt(env)}\n`; t += `Total: ${fmt(total)}\n\n`;
-  t += delivery ? `Entrega a domicilio${v("c-addr") ? ": " + v("c-addr") : ""}\n` : `Paso a recoger\n`;
+  t += `\nSubtotal: ${fmt(sub)}\n`; if (env) t += `Envío: ${fmt(env)}\n`; else if (delivery) t += `Envío: por confirmar\n`; t += `*Total: ${fmt(total)}*\n\n`;
+  t += delivery ? `Entrega: a domicilio${v("c-addr") ? ", " + v("c-addr") : ""}\n` : `Entrega: paso a recoger\n`;
   t += `Pago: ${v("c-pay")}`; if (v("c-pay") === "Efectivo" && v("c-cash")) t += ` (pago con $${v("c-cash")})`;
   if (v("c-name")) t += `\nNombre: ${v("c-name")}`;
+  if (tel) {
+    t += `\nWhatsApp: ${tel.slice(-10).replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")}`;
+    const q = new URLSearchParams({f: FOLIO, t: tel, n: NEGOCIO.nombre, c: v("c-name"), tot: total, d: delivery ? 1 : 0});
+    t += `\n\nPara el negocio, confirmar en un toque:\n${CONFIRMA}?${q}`;
+  }
   return t;
 }
 function refresh(){
@@ -397,7 +407,7 @@ function refresh(){
   render($("q").value);
 }
 $("c-lines").onclick = e => { const b = e.target.closest("[data-l]"); if (!b) return; const l = cart[+b.dataset.l]; l.qty += +b.dataset.d; if (l.qty <= 0) cart.splice(+b.dataset.l, 1); refresh(); };
-["c-name","c-addr","c-pay","c-cash"].forEach(id => $(id).addEventListener("input", refresh));
+["c-name","c-tel","c-addr","c-pay","c-cash"].forEach(id => $(id).addEventListener("input", refresh));
 function setDel(d){ delivery = d; $("t-del").setAttribute("aria-pressed", d); $("t-pick").setAttribute("aria-pressed", !d); $("c-addr-l").hidden = !d; refresh(); }
 $("t-del").onclick = () => setDel(true); $("t-pick").onclick = () => setDel(false);
 
